@@ -9,9 +9,7 @@ import {
 export class CreateProductUseCase {
   constructor(private productRepository: ProductRepositoryInterface) {}
 
-  async executar(
-    input: InputCreateProductDto
-  ): Promise<OutputCreateProductDto> {
+  async execute(input: InputCreateProductDto): Promise<OutputCreateProductDto> {
     const info = ProductFactory.create(input.type, input.name, input.price);
     const product = new Product(info.id, info.name, info.price);
     this.productRepository.create(product);

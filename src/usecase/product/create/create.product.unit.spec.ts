@@ -30,7 +30,7 @@ describe("Unit Test find product use case", () => {
       id: "MockedId",
     };
 
-    const result = await useCase.executar(input);
+    const result = await useCase.execute(input);
 
     expect(result).toEqual(output);
   });
@@ -48,7 +48,7 @@ describe("Unit Test find product use case", () => {
       id: "MockedId",
     };
 
-    const result = await useCase.executar(input);
+    const result = await useCase.execute(input);
 
     expect(result).toEqual(output);
   });
@@ -62,7 +62,7 @@ describe("Unit Test find product use case", () => {
       type: "a",
     };
 
-    await expect(useCase.executar(input)).rejects.toThrowError(
+    await expect(useCase.execute(input)).rejects.toThrowError(
       "Name is required"
     );
   });
@@ -76,7 +76,7 @@ describe("Unit Test find product use case", () => {
       type: "a",
     };
 
-    await expect(useCase.executar(input)).rejects.toThrowError(
+    await expect(useCase.execute(input)).rejects.toThrowError(
       "Price must be greater than zero"
     );
   });
@@ -90,7 +90,7 @@ describe("Unit Test find product use case", () => {
       type: "not-found-type",
     };
 
-    await expect(useCase.executar(input)).rejects.toThrowError(
+    await expect(useCase.execute(input)).rejects.toThrowError(
       "Product type not supported"
     );
   });
