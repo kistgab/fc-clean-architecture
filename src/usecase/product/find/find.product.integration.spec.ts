@@ -43,6 +43,7 @@ describe("Test find product use case", () => {
     expect(result).toEqual(output);
   });
 
+  // TODO: Remove skip and fix the test
   it.skip("should throw an exception when the product was not found", async () => {
     const productRepository = new ProductRepository();
     const usecase = new FindProductUseCase(productRepository);
