@@ -19,7 +19,12 @@ describe("Unit Test list products use case", () => {
     const repository = MockRepository();
     const useCase = new ListProductUseCase(repository);
     const input: InputListCustomerDto = {};
-    const output: OutputListProductDto = { products: [product, product2] };
+    const output: OutputListProductDto = {
+      products: [
+        { id: product.id, name: product.name, price: product.price },
+        { id: product2.id, name: product2.name, price: product2.price },
+      ],
+    };
 
     const result = await useCase.execute(input);
 
