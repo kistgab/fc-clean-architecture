@@ -1,4 +1,3 @@
-import Product from "../../../domain/product/entity/product";
 import ProductRepositoryInterface from "../../../domain/product/repository/product-repository.interface";
 import {
   InputUpdateProductDto,
@@ -9,7 +8,9 @@ export default class UpdateProductUseCase {
   constructor(private productRepository: ProductRepositoryInterface) {}
 
   async execute(input: InputUpdateProductDto): Promise<OutputUpdateProductDto> {
-    const productToUpdate = new Product(input.id, input.name, input.price);
+    const productToUpdate = await this.productRepository.find(input.id);
+    productToUpdate.changeName(input.name);
+    productToUpdate.changePrice(input.price);
     this.productRepository.update(productToUpdate);
     return {
       id: productToUpdate.id,
