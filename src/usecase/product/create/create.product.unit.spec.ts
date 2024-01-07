@@ -81,6 +81,20 @@ describe("Unit Test find product use case", () => {
     );
   });
 
+  it("should throw when the price is missing", async () => {
+    const productRepository = MockRepository();
+    const useCase = new CreateProductUseCase(productRepository);
+    const input: InputCreateProductDto = {
+      name: "name",
+      price: undefined,
+      type: "a",
+    };
+
+    await expect(useCase.execute(input)).rejects.toThrowError(
+      "Price is required"
+    );
+  });
+
   it("should throw when the type is wrong", async () => {
     const productRepository = MockRepository();
     const useCase = new CreateProductUseCase(productRepository);
