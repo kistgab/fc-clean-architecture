@@ -70,17 +70,17 @@ describe("Unit Tests update product use case", () => {
   it("should not update the product when the id doesnt exists in the dabase", async () => {
     const productRepository = MockRepository();
     const input: InputUpdateProductDto = {
-      id: "id that doenst exists",
+      id: "id that doesnt exists",
       name: "different name",
       price: 500,
     };
-    jest.spyOn(productRepository, "update").mockImplementation(() => {
-      throw new Error("Sequelize error during update");
+    productRepository.find = jest.fn().mockImplementation(() => {
+      throw new Error("Product was not found");
     });
     const useCase = new UpdateProductUseCase(productRepository);
 
     expect(async () => await useCase.execute(input)).rejects.toThrowError(
-      "Sequelize error during update"
+      "Product was not found"
     );
   });
 });
