@@ -5,14 +5,9 @@ import {
 } from "./update.product.dto";
 import UpdateProductUseCase from "./update.product.usecase";
 
-const initialProduct = new Product("MockedId", "White fancy chair", 199.9);
-const updatedProduct = new Product(initialProduct.id, "different name", 500);
 const MockRepository = () => {
   return {
-    find: jest
-      .fn()
-      .mockReturnValueOnce(initialProduct)
-      .mockReturnValueOnce(updatedProduct),
+    find: jest.fn(),
     findAll: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
@@ -20,6 +15,14 @@ const MockRepository = () => {
 };
 
 describe("Unit Tests update product use case", () => {
+  let initialProduct: Product;
+  let updatedProduct: Product;
+
+  beforeEach(() => {
+    initialProduct = new Product("MockedId", "White fancy chair", 199.9);
+    updatedProduct = new Product(initialProduct.id, "different name", 500);
+  });
+
   it("should update the product successfully", async () => {
     const productRepository = MockRepository();
     const input: InputUpdateProductDto = {
@@ -32,6 +35,10 @@ describe("Unit Tests update product use case", () => {
       name: input.name,
       price: input.price,
     };
+    jest
+      .spyOn(productRepository, "find")
+      .mockReturnValueOnce(initialProduct)
+      .mockReturnValueOnce(updatedProduct);
     const useCase = new UpdateProductUseCase(productRepository);
 
     const result = await useCase.execute(input);
@@ -46,10 +53,11 @@ describe("Unit Tests update product use case", () => {
       name: "",
       price: 500,
     };
+    jest.spyOn(productRepository, "find").mockReturnValueOnce(initialProduct);
     const useCase = new UpdateProductUseCase(productRepository);
 
     expect(async () => await useCase.execute(input)).rejects.toThrowError(
-      "Name is required"
+      "product: Name is required"
     );
   });
 
@@ -60,12 +68,13 @@ describe("Unit Tests update product use case", () => {
       name: "different name",
       price: -1,
     };
+    jest.spyOn(productRepository, "find").mockReturnValueOnce(initialProduct);
     const useCase = new UpdateProductUseCase(productRepository);
 
-    expect(async () => await useCase.execute(input)).rejects.toThrowError(
-      "Price must be greater than zero"
+    await expect(useCase.execute(input)).rejects.toThrowError(
+      "product: Price must be greater than zero"
     );
-  });
+  }, 5400000);
 
   it("should not update the product when the id doesnt exists in the dabase", async () => {
     const productRepository = MockRepository();
