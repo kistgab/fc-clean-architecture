@@ -45,16 +45,13 @@ describe("Test find product use case", () => {
 
   it("should throw an exception when the product was not found", async () => {
     const productRepository = new ProductRepository();
-    jest.spyOn(productRepository, "find").mockImplementation(() => {
-      throw new Error("Product was not found.");
-    });
     const usecase = new FindProductUseCase(productRepository);
     const input = {
       id: "non-existing-id",
     };
 
     expect(async () => await usecase.execute(input)).rejects.toThrowError(
-      "Product was not found."
+      "Product was not found"
     );
   });
 });
