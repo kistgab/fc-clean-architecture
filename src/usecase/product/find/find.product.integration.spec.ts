@@ -43,14 +43,18 @@ describe("Test find product use case", () => {
     expect(result).toEqual(output);
   });
 
-  // TODO: Remove skip and fix the test
-  it.skip("should throw an exception when the product was not found", async () => {
+  it("should throw an exception when the product was not found", async () => {
     const productRepository = new ProductRepository();
+    jest.spyOn(productRepository, "find").mockImplementation(() => {
+      throw new Error("Product was not found.");
+    });
     const usecase = new FindProductUseCase(productRepository);
     const input = {
       id: "non-existing-id",
     };
 
-    expect(async () => await usecase.execute(input)).rejects.toThrowError("~");
+    expect(async () => await usecase.execute(input)).rejects.toThrowError(
+      "Product was not found."
+    );
   });
 });
